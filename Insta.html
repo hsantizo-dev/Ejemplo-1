@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarea: InstaClone</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: #fafafa; }
+        .screen { display: none; }
+        .active-screen { display: block; }
+        
+        /* Estilos Login */
+        #login-screen { text-align: center; padding-top: 100px; }
+        .login-card { background: white; border: 1px solid #dbdbdb; padding: 30px; display: inline-block; width: 300px; }
+        
+        /* Estilos App */
+        .header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 10px 20px; border-bottom: 1px solid #dbdbdb; position: sticky; top: 0; z-index: 10; }
+        .page { display: none; padding: 10px; max-width: 500px; margin: 0 auto; padding-bottom: 70px; }
+        .active-page { display: block; }
+        
+        /* Estilos de Imágenes y Posts */
+        .post-img { width: 100%; border-radius: 3px; margin-bottom: 10px; display: block; }
+        .post-card { background: white; border: 1px solid #dbdbdb; margin-bottom: 20px; padding: 10px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; }
+        .grid img { width: 100%; height: 100px; object-fit: cover; }
+
+        /* Navegación */
+        nav { display: flex; justify-content: space-around; background: white; padding: 15px; position: fixed; bottom: 0; width: 100%; border-top: 1px solid #dbdbdb; }
+        input { width: 90%; margin: 5px 0; padding: 10px; border: 1px solid #dbdbdb; border-radius: 5px; }
+        button { cursor: pointer; padding: 8px 15px; border: none; background: #0095f6; color: white; border-radius: 5px; font-weight: bold; }
+        .btn-nav { background: none; color: black; font-size: 20px; }
+    </style>
+</head>
+<body>
+
+    <!-- Pantalla 1: Login -->
+    <div id="login-screen" class="screen active-screen">
+        <div class="login-card">
+            <h1>InstaClone</h1>
+            <input type="text" id="user" placeholder="Teléfono, usuario o correo"><br>
+            <input type="password" id="pass" placeholder="Contraseña"><br>
+            <button onclick="login()" style="width: 100%; margin-top: 10px;">Iniciar sesión</button>
+        </div>
+    </div>
+
+    <!-- Pantalla 2: App Principal -->
+    <div id="app-screen" class="screen">
+        <div class="header">
+            <button onclick="goBack()" style="background: #efefef; color: black;"> < Retroceso</button>
+            <h3 style="margin: 0;">InstaClone</h3>
+            <button onclick="showPage('home')" style="background: #efefef; color: black;">Inicio</button>
+        </div>
+
+        <!-- Sección: Publicaciones (Home) -->
+        <div id="home" class="page active-page">
+            <div class="post-card">
+                <strong>@usuario_viajero</strong>
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=500" class="post-img" alt="Paisaje">
+                <span>Increíble vista de hoy! 🏔️</span>
+            </div>
+            <div class="post-card">
+                <strong>@comida_lover</strong>
+                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=500" class="post-img" alt="Comida">
+                <span>El mejor desayuno del mundo 🍳</span>
+            </div>
+        </div>
+
+        <!-- Sección: Búsqueda -->
+        <div id="search" class="page">
+            <input type="text" placeholder="🔍 Buscar contenido...">
+            <div class="grid" style="margin-top: 15px;">
+                <img src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=200">
+                <img src="https://images.unsplash.com/photo-1521747116042-5a810fda9664?w=200">
+                <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=200">
+            </div>
+        </div>
+
+        <!-- Sección: Reels -->
+        <div id="reels" class="page">
+            <div class="post-card" style="background: #000; color: white;">
+                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=500" class="post-img" style="height: 400px; object-fit: cover;">
+                <p>▶️ Reel de video - @creative_clips</p>
+            </div>
+        </div>
+
+        <!-- Sección: Perfil -->
+        <div id="profile" class="page">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" style="width: 80px; height: 80px; border-radius: 50%;">
+                <h4>Tu Perfil</h4>
+            </div>
+            <div class="grid">
+                <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=200">
+                <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=200">
+                <img src="https://images.unsplash.com/photo-1500673922987-e212871fec22?w=200">
+            </div>
+        </div>
+
+        <!-- Navegación Inferior -->
+        <nav>
+            <button class="btn-nav" onclick="showPage('home')">🏠</button>
+            <button class="btn-nav" onclick="showPage('search')">🔍</button>
+            <button class="btn-nav" onclick="showPage('reels')">🎬</button>
+            <button class="btn-nav" onclick="showPage('profile')">👤</button>
+        </nav>
+    </div>
+
+    <script>
+        function login() {
+            const user = document.getElementById('user').value;
+            if(user.trim() !== "") {
+                document.getElementById('login-screen').classList.remove('active-screen');
+                document.getElementById('app-screen').classList.add('active-screen');
+            } else {
+                alert("Por favor ingresa un nombre de usuario.");
+            }
+        }
+
+        function goBack() {
+            document.getElementById('app-screen').classList.remove('active-screen');
+            document.getElementById('login-screen').classList.add('active-screen');
+        }
+
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(p => p.classList.remove('active-page'));
+            document.getElementById(pageId).classList.add('active-page');
+        }
+    </script>
+</body>
+</html>
